@@ -34,7 +34,7 @@ The office has **3 rooms** (Drawing Room, Work Room 1, Work Room 2), each with
 **Option A, clone with Git:**
 
 ```bash
-git clone <YOUR_REPO_URL>
+git clone https://github.com/SMAZY0210/IUTTechathonHackathonDiscord
 cd office-monitor
 ```
 
