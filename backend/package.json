@@ -1,0 +1,18 @@
+{
+  "name": "office-monitor-backend",
+  "version": "0.1.0",
+  "description": "Backend for the office lights & fans monitor: REST API + Socket.IO over a single in-memory source of truth, with a device-state simulator.",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}

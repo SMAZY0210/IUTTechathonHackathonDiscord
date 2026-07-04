@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Office Power Monitor</title>
+    <script>
+      // Set the theme before first paint to avoid a flash. Uses a saved choice,
+      // else the OS preference, defaulting to dark.
+      (function () {
+        try {
+          var t = localStorage.getItem("opm-theme");
+          if (!t) t = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+          document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="scanlines" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand__bolt" aria-hidden="true">&#9889;</span>
+        <span class="brand__name">Office Power Monitor</span>
+        <span class="brand__meta">15 devices &middot; 3 rooms</span>
+      </div>
+      <div class="status" id="conn">
+        <span class="status__dot" aria-hidden="true"></span>
+        <span class="status__label" id="conn-label">Connecting…</span>
+        <span class="status__clock" id="clock">--:--:--</span>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle theme"></button>
+      </div>
+    </header>
+
+    <!-- HERO: the live power meter is the thesis of the whole page -->
+    <section class="meter" aria-label="Live power">
+      <div class="meter__primary">
+        <div class="meter__eyebrow">Live power draw</div>
+        <div class="meter__readout">
+          <span class="meter__value" id="total-watts">0</span>
+          <span class="meter__unit">W</span>
+        </div>
+        <div class="meter__bar" role="img" aria-label="Load relative to full office">
+          <div class="meter__bar-fill" id="load-fill"></div>
+        </div>
+        <div class="meter__scale"><span>0</span><span id="load-max">495 W max</span></div>
+      </div>
+      <div class="meter__aside">
+        <div class="stat">
+          <div class="stat__label">Today's usage</div>
+          <div class="stat__value"><span id="today-kwh">0.00</span><span class="stat__unit">kWh</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat__label">Devices on</div>
+          <div class="stat__value"><span id="devices-on">0</span><span class="stat__unit">/ 15</span></div>
+        </div>
+      </div>
+    </section>
+
+    <main class="grid">
+      <!-- SIGNATURE: animated top-view floor plan -->
+      <section class="panel panel--plan">
+        <div class="panel__head">
+          <h2 class="panel__title">Floor plan</h2>
+          <p class="panel__hint">Lights glow when on &middot; fans spin when running</p>
+        </div>
+        <div class="floorplan" id="floorplan"><!-- rooms injected by JS --></div>
+      </section>
+
+      <div class="stack">
+        <!-- Alerts -->
+        <section class="panel panel--alerts">
+          <div class="panel__head">
+            <h2 class="panel__title">Alerts</h2>
+            <span class="badge" id="alert-count">0</span>
+          </div>
+          <ul class="alerts" id="alerts">
+            <li class="alerts__empty">All clear — nothing left on out of hours.</li>
+          </ul>
+        </section>
+
+        <!-- Per-room power breakdown -->
+        <section class="panel panel--rooms">
+          <div class="panel__head"><h2 class="panel__title">Per-room power</h2></div>
+          <div class="rooms" id="rooms"><!-- injected by JS --></div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Live Device Status Panel (required): every device, by room -->
+    <section class="panel panel--devices">
+      <div class="panel__head">
+        <h2 class="panel__title">Device status</h2>
+        <p class="panel__hint">All 15 devices, grouped by room</p>
+      </div>
+      <div class="devices" id="devices"><!-- injected by JS --></div>
+    </section>
+
+    <footer class="foot">
+      <span id="last-update">Waiting for first update…</span>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>

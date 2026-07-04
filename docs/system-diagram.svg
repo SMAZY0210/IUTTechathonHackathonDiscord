@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" font-family="'Space Grotesk', 'Segoe UI', system-ui, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#8ea0b6" />
+    </marker>
+    <style>
+      .box { fill: #16202e; stroke: #29394e; stroke-width: 1.5; }
+      .box-source { fill: #16202e; stroke: #f5b14c; stroke-width: 2; }
+      .title { fill: #e7eef7; font-size: 15px; font-weight: 700; }
+      .body { fill: #8ea0b6; font-size: 11.5px; }
+      .edge { stroke: #8ea0b6; stroke-width: 1.6; fill: none; }
+      .edge-live { stroke: #4fd1e0; stroke-width: 1.8; fill: none; }
+      .edge-rest { stroke: #f5b14c; stroke-width: 1.8; fill: none; }
+      .lbl { fill: #c7d4e3; font-size: 11px; }
+      .lbl-bg { fill: #0e1520; }
+      .cyan { fill: #4fd1e0; }
+      .amber { fill: #f5b14c; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="560" fill="#0e1520" />
+
+  <text x="600" y="46" text-anchor="middle" fill="#e7eef7" font-size="24" font-weight="700">Office Power Monitor — System Architecture</text>
+  <text x="600" y="74" text-anchor="middle" fill="#8ea0b6" font-size="13">One backend, one source of truth → web dashboard + Discord bot</text>
+
+  <!-- 1. Simulator -->
+  <g>
+    <rect class="box" x="40" y="232" width="180" height="96" rx="11" />
+    <text class="title" x="130" y="264" text-anchor="middle">Simulator</text>
+    <text class="body" x="130" y="286" text-anchor="middle">tick loop · every 5s</text>
+    <text class="body" x="130" y="303" text-anchor="middle">flips devices,</text>
+    <text class="body" x="130" y="320" text-anchor="middle">accrues kWh</text>
+  </g>
+
+  <!-- 2. Store (source of truth) -->
+  <g>
+    <rect class="box-source" x="290" y="232" width="180" height="96" rx="11" />
+    <text class="title" x="380" y="262" text-anchor="middle">In-memory Store</text>
+    <text x="380" y="283" text-anchor="middle" class="amber" font-size="11.5" font-weight="600">★ source of truth</text>
+    <text class="body" x="380" y="301" text-anchor="middle">device states</text>
+    <text class="body" x="380" y="318" text-anchor="middle">+ today's kWh</text>
+  </g>
+
+  <!-- 3. Backend -->
+  <g>
+    <rect class="box" x="560" y="205" width="190" height="150" rx="11" />
+    <text class="title" x="655" y="234" text-anchor="middle">Backend — Node.js</text>
+    <circle cx="588" cy="264" r="4" class="amber" />
+    <text x="600" y="268" fill="#c7d4e3" font-size="12">Express REST API</text>
+    <circle cx="588" cy="292" r="4" class="cyan" />
+    <text x="600" y="296" fill="#c7d4e3" font-size="12">Socket.IO (push)</text>
+    <text class="body" x="655" y="330" text-anchor="middle">also serves the web UI</text>
+  </g>
+
+  <!-- 4. Dashboard -->
+  <g>
+    <rect class="box" x="820" y="110" width="180" height="96" rx="11" />
+    <text class="title" x="910" y="140" text-anchor="middle">Web Dashboard</text>
+    <text class="body" x="910" y="161" text-anchor="middle">browser · live</text>
+    <text class="body" x="910" y="178" text-anchor="middle">devices, power meter,</text>
+    <text class="body" x="910" y="195" text-anchor="middle">alerts, floor plan</text>
+  </g>
+
+  <!-- 5. Bot -->
+  <g>
+    <rect class="box" x="820" y="352" width="180" height="96" rx="11" />
+    <text class="title" x="910" y="382" text-anchor="middle">Discord Bot</text>
+    <text class="body" x="910" y="403" text-anchor="middle">!status · !room · !usage</text>
+    <text class="body" x="910" y="420" text-anchor="middle">reads REST,</text>
+    <text class="body" x="910" y="437" text-anchor="middle">posts proactive alerts</text>
+  </g>
+
+  <!-- 6. User -->
+  <g>
+    <rect class="box" x="1050" y="232" width="120" height="96" rx="11" />
+    <text class="title" x="1110" y="276" text-anchor="middle">User</text>
+    <text class="body" x="1110" y="298" text-anchor="middle">boss &amp; team</text>
+  </g>
+
+  <!-- edges -->
+  <!-- Sim -> Store -->
+  <line class="edge" x1="220" y1="280" x2="286" y2="280" marker-end="url(#arrow)" />
+  <text class="lbl" x="253" y="272" text-anchor="middle">updates</text>
+
+  <!-- Store -> Backend -->
+  <line class="edge" x1="470" y1="280" x2="556" y2="280" marker-end="url(#arrow)" />
+  <text class="lbl" x="513" y="272" text-anchor="middle">reads</text>
+
+  <!-- Backend Socket.IO -> Dashboard (live) -->
+  <path class="edge-live" d="M750 250 C 790 220, 795 190, 816 172" marker-end="url(#arrow)" />
+  <rect class="lbl-bg" x="700" y="196" width="150" height="16" rx="3" />
+  <text x="775" y="208" text-anchor="middle" class="cyan" font-size="11">Socket.IO · "state" (live)</text>
+
+  <!-- Backend REST -> Bot (on command) -->
+  <path class="edge-rest" d="M750 300 C 790 340, 795 372, 816 388" marker-end="url(#arrow)" />
+  <rect class="lbl-bg" x="700" y="350" width="152" height="16" rx="3" />
+  <text x="776" y="362" text-anchor="middle" class="amber" font-size="11">REST /api/* (on command)</text>
+
+  <!-- Dashboard -> User -->
+  <path class="edge" d="M1000 158 C 1030 180, 1040 205, 1050 240" marker-end="url(#arrow)" />
+  <text class="lbl" x="1058" y="196" text-anchor="middle">views live</text>
+
+  <!-- Bot <-> User -->
+  <path class="edge" d="M1000 400 C 1030 378, 1040 352, 1050 320" marker-end="url(#arrow)" marker-start="url(#arrow)" />
+  <rect class="lbl-bg" x="1000" y="356" width="150" height="16" rx="3" />
+  <text x="1075" y="368" text-anchor="middle" class="lbl" font-size="11">commands / replies + alerts</text>
+
+  <!-- caption -->
+  <text x="600" y="516" text-anchor="middle" fill="#8ea0b6" font-size="11.5">Data flows one way: simulator → store → backend. The dashboard receives live Socket.IO pushes; the bot queries REST on demand.</text>
+  <text x="600" y="534" text-anchor="middle" fill="#5f7288" font-size="11">Both interfaces read the same single source of truth, so they never disagree.  ★ = source of truth</text>
+</svg>

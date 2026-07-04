@@ -1,0 +1,18 @@
+{
+  "name": "office-monitor-bot",
+  "version": "0.1.0",
+  "description": "Discord bot for the office monitor. Reads the shared backend REST API and answers !status / !room / !usage, with optional LLM-phrased replies and proactive alerts.",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "dryrun": "node src/dryrun.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.4.5"
+  }
+}
